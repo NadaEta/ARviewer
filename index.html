@@ -1,32 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Model viwer-AR Test</title>
-   <!-- 🔥 REQUIRED -->
-   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js"></script>
-   <style>
-    model-viewer {
-      width: 100%;
-      height: 100vh;
-   
-    }
-   </style>
-  </head>
-
-  <body>
+<head>
+  <meta charset="utf-8" />
+  <title>Furniture AR - Night Stand</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js"></script>
   
- 
-  <model-viewer 
-   src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-   ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; }
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      padding: 10px 20px;
+      border-radius: 50px;
+      color: white;
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+  <model-viewer id="viewer"
+    src="./src/models/Night-Stand.glb"
     ar
-  ar-modes="webxr scene-viewer quick-look"
-  camera-controls
-  auto-rotate
->
-      <button slot="ar-button">View in your room</button>
-</model-viewer>
+    ar-modes="webxr scene-viewer quick-look"
+    ar-placement="floor"
+    camera-controls
+    shadow-intensity="1"
+    exposure="0.8"
+    environment-intensity="0.8"
+    auto-rotate
+    style="background-color: #eeeeee;"
+  >
+    <button slot="ar-button" style="background: white; color: black; padding: 12px 24px; border-radius: 50px; font-weight: bold;">
+      👁️ View in Your Room
+    </button>
+  </model-viewer>
+
+  <!-- Color Change Controls -->
+  <div class="controls">
+    <button onclick="changeColor('#8B4513')">Brown</button>
+    <button onclick="changeColor('#FFFFFF')">White</button>
+    <button onclick="changeColor('#000000')">Black</button>
+    <button onclick="changeColor('#A52A2A')">Red</button>
+  </div>
+
+<script>
+  const modelViewer = document.getElementById('viewer');
+
+  function changeColor(hex) {
+    modelViewer.model.materials.forEach((material) => {
+      if (material.name.toLowerCase().includes('wood') || material.name.toLowerCase().includes('body')) {
+        material.pbrMetallicRoughness.baseColorFactor = hexToRgb(hex);
+      }
+    });
+  }
+
+  function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1,3), 16) / 255;
+    const g = parseInt(hex.slice(3,5), 16) / 255;
+    const b = parseInt(hex.slice(5,7), 16) / 255;
+    return [r, g, b, 1];
+  }
+</script>
+
+
 
 
   
